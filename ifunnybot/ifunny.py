@@ -30,8 +30,3 @@ class Post:
         media_url_end_index = html[media_url_begin_index: ].find('"')
 
         return html[media_url_begin_index : media_url_begin_index + media_url_end_index]
-
-if __name__ == "__main__":
-    post = Post("https://ifunny.co/picture/tanya-tanya-sabrinaaa-since-we-can-t-use-plastic-straws-pBAPYg00B")
-
-    url = post.fetch_media_url()
