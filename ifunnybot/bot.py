@@ -19,10 +19,8 @@ class IFunnyBot(discord.Bot):
         self.add_listener(self.fetch_media_link, "on_message")
     
     async def fetch_media_link(self, message: discord.Message):
-
-        print(message.content)
         
-        if "https://ifunny.co/picture/" not in message.content and "https://ifunny.co/video/" not in message.content:
+        if "https://ifunny.co/" not in message.content:
             return
 
         media_url = Post(message.content).fetch_media_url()

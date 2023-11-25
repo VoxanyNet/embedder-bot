@@ -1,8 +1,5 @@
 import requests as r
 
-class UnknownPostType(Exception):
-    pass 
-
 class Post:
     
     def __init__(self, url: str) -> None:
@@ -17,10 +14,6 @@ class Post:
         )
 
     def fetch_media_url(self) -> str:
-        
-        if "picture" not in self.url and "video" not in self.url:
-
-            raise UnknownPostType(f"unknown post type for url {self.url}")
 
         html = self.session.get(self.url).text
 
