@@ -20,6 +20,15 @@ class IFunnyBot(discord.Bot):
     
     async def fetch_media_link(self, message: discord.Message):
         
+        can_embed = False 
+
+        for role in message.author.roles:
+            if role.permissions.embed_links:
+                can_embed = True
+        
+        if not can_embed:
+            return
+        
         if "https://ifunny.co/" not in message.content:
             return
 
