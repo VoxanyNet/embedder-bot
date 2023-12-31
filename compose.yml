@@ -1,0 +1,28 @@
+services:
+  bot:
+    build: .
+    environment:
+      - BOT_DISCORD_TOKEN=${BOT_DISCORD_TOKEN}
+
+  shlink:
+    image: shlinkio/shlink:stable
+    ports:
+      - 9080:8080
+    environment:
+      - DEFAULT_DOMAIN=${SHLINK_DOMAIN}
+      - DB_DRIVER=mysql
+      - DB_USER=root
+      - DB_PASSWORD=${SHLINK_DATABASE_PASSWORD}
+      - DB_HOST=shlink-database
+      - IS_HTTPS_ENABLED=true
+    depends_on:
+      - shlink-database
+    restart: always
+    
+
+  shlink-database:
+    image: mysql:8.2
+    volumes: 
+      - ${SHLINK_DATABASE_PATH}=/var/lib/mysql    
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SHLINK_DATABASE_PASSWORD}
