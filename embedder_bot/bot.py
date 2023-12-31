@@ -5,6 +5,7 @@ import discord
 
 from embedder_bot import extractors
 from embedder_bot import shlink
+from embedder_bot import commands
 
 class EmbedderBot(discord.Bot):
     def __init__(self, shlink_url: str, shlink_api_key: str, description=None, *args, **options):
@@ -19,6 +20,8 @@ class EmbedderBot(discord.Bot):
 
         self.add_listener(self.fetch_media_link, "on_message")
         self.add_listener(self.delete_reply, "on_message_delete")
+
+        self.add_application_command(commands.ping)
 
         self.shlink = shlink.Shlink(url=shlink_url, api_key=shlink_api_key)
     
