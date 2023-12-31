@@ -4,13 +4,13 @@ import tempfile
 
 import discord
 
-from embedder_bot import downloaders
+from embedder_bot import extractors
+from embedder_bot import shlink
 
 class EmbedderBot(discord.Bot):
-    def __init__(self, description=None, *args, **options):
+    def __init__(self, shlink_url: str, shlink_api_key: str, description=None, *args, **options):
 
         intents = discord.Intents.default()
-
         intents.message_content = True
 
         super().__init__(description, intents=intents, *args, **options)
@@ -20,6 +20,8 @@ class EmbedderBot(discord.Bot):
 
         self.add_listener(self.fetch_media_link, "on_message")
         self.add_listener(self.delete_reply, "on_message_delete")
+
+        self.shlink = shlink.Shlink(url=shlink_url, api_key=shlink_api_key)
     
     async def fetch_media_link(self, message: discord.Message):
         
@@ -36,36 +38,28 @@ class EmbedderBot(discord.Bot):
 
             return
         
-        # check if link exists in supported links dict
-        # TODO: extract every link from message and download each one
+        # check if link has an extractor
+        extractor_class: Type[extractors.Extractor] = None 
 
-        downloader: Type[downloaders.Downloader] = None 
+        for supported_url_base, link_extractor in extractors.URL_DOWNLOADER_MAP.items():
+            if supported_url_base in message.content:
 
-        for supported_link, link_downloader in downloaders.URL_DOWNLOADER_MAP.items():
-            if supported_link in message.content:
-
-                downloader = link_downloader
+                extractor_class = link_extractor
 
                 break
         
-        # if we can't find a downloader for this link
-        if downloader == None:
+        # if we can't find an extractor for this link
+        if extractor_class == None:
             return 
         
         await message.channel.trigger_typing()
 
         # this wont work if the message contains more than just a url
-        dl = downloader(message.content, output_directory=tempfile.gettempdir())
+        extractor = extractor_class(url=message.content)
 
-        file_path = dl.download()
+        media_url = extractor.extract_media_url()
 
-        # TODO: upload to file server if too large
-
-        reply_message = await message.reply(file=discord.File(file_path))
-
-        # TODO: add ability to convert file type if incompatible with discord's player
-
-        os.remove(file_path)
+        reply_message = await message.reply(media_url)
         
         self.reply_messages[message.id] = reply_message.id
     
