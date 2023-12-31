@@ -3,6 +3,8 @@ services:
     build: .
     environment:
       - BOT_DISCORD_TOKEN=${BOT_DISCORD_TOKEN}
+      - SHLINK_DOMAIN=${SHLINK_DOMAIN}
+      - SHLINK_API_KEY=${SHLINK_API_KEY}
 
   shlink:
     image: shlinkio/shlink:stable
@@ -22,7 +24,9 @@ services:
 
   shlink-database:
     image: mysql:8.2
-    volumes: 
-      - ${SHLINK_DATABASE_PATH}=/var/lib/mysql    
+    volumes:
+      - type: bind
+        source: ${SHLINK_DATABASE_PATH}
+        target: /var/lib/mysql    
     environment:
       - MYSQL_ROOT_PASSWORD=${SHLINK_DATABASE_PASSWORD}
