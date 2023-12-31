@@ -1,6 +1,5 @@
 from typing import Dict, Type
-import os
-import tempfile
+import asyncio
 
 import discord
 
@@ -57,9 +56,16 @@ class EmbedderBot(discord.Bot):
         # this wont work if the message contains more than just a url
         extractor = extractor_class(url=message.content)
 
-        media_url = extractor.extract_media_url()
+        media_url = await self.loop.run_in_executor(
+            None,
+            extractor.extract_media_url
+        )
 
-        shortened_media_url = self.shlink.shorten_url(media_url)
+        shortened_media_url = await self.loop.run_in_executor(
+            None,
+            self.shlink.shorten_url,
+            media_url
+        )
 
         reply_message = await message.reply(shortened_media_url)
         
