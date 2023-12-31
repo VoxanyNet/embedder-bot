@@ -15,7 +15,7 @@ class Shlink:
         }
 
         response = requests.post(
-            self.url,
+            f"{self.url}/rest/v3/short-urls",
             headers={
                 "X-Api-Key": self.api_key
             },

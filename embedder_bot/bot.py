@@ -59,7 +59,9 @@ class EmbedderBot(discord.Bot):
 
         media_url = extractor.extract_media_url()
 
-        reply_message = await message.reply(media_url)
+        shortened_media_url = self.shlink.shorten_url(media_url)
+
+        reply_message = await message.reply(shortened_media_url)
         
         self.reply_messages[message.id] = reply_message.id
     
