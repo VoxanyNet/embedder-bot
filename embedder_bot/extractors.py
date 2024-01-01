@@ -1,16 +1,13 @@
-import os
 import json
+from typing import Optional
 
 import yt_dlp
 import requests
 
 from embedder_bot import utils
 
-class FailedToExtract(Exception):
-    pass 
-
 class Extractor:
-    def extract_media_url(self) -> str:
+    def extract_media_url(self) -> Optional[str]:
         """
         Extract direct link to media
         """
@@ -43,12 +40,14 @@ class YTDLExtractor(Extractor):
     def _extract_info(self):
         
         with yt_dlp.YoutubeDL(self.yt_dlp_options) as yt:
-            return yt.extract_info(self.url, download=False)
+            info = yt.extract_info(self.url, download=False)
+
+            return info
 
 
 class IFunny(HTMLExtractor):
 
-    def extract_media_url(self) -> str:
+    def extract_media_url(self) -> Optional[str]:
         
         html = self.session.get(self.url).text
 
@@ -63,7 +62,7 @@ class IFunny(HTMLExtractor):
 
 class TikTok(YTDLExtractor):
 
-    def extract_media_url(self) -> str: 
+    def extract_media_url(self) -> Optional[str]: 
 
         info = self._extract_info()
 
@@ -75,7 +74,7 @@ class TikTok(YTDLExtractor):
         )
 
         if format is None:
-            raise FailedToExtract()
+            return None
 
         return format["url"]
     
@@ -83,8 +82,3 @@ URL_DOWNLOADER_MAP = {
     "ifunny.co": IFunny,
     "tiktok.com": TikTok
 }
-
-if __name__ == "__main__":
-    extractor = TikTok("https://www.tiktok.com/@operagxofficial/video/7316135204190522656")
-
-    extractor.extract_media_url()

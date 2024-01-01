@@ -53,8 +53,6 @@ class EmbedderBot(discord.Bot):
         # if we can't find an extractor for this link
         if extractor_class == None:
             return 
-        
-        await message.channel.trigger_typing()
 
         # this wont work if the message contains more than just a url
         extractor = extractor_class(url=message.content)
@@ -64,6 +62,12 @@ class EmbedderBot(discord.Bot):
             extractor.extract_media_url
         )
 
+        # if we can't find a media url
+        if media_url is None:
+            return
+
+        await message.channel.trigger_typing()
+        
         shortened_media_url = await self.loop.run_in_executor(
             None,
             self.shlink.shorten_url,
