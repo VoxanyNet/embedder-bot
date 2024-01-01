@@ -77,8 +77,28 @@ class TikTok(YTDLExtractor):
             return None
 
         return format["url"]
+
+class Twitter(YTDLExtractor):
+    
+    def extract_media_url(self) -> Optional[str]:
+
+        # TODO: add support to embed images
+        
+        try:
+            info = self._extract_info()
+
+        except yt_dlp.utils.DownloadError:
+            # tweet doesnt have media
+            return None
+
+        with open("test.json", "w") as file:
+            json.dump(info, file, indent=4)
+
+        return info["url"]
     
 URL_DOWNLOADER_MAP = {
     "ifunny.co": IFunny,
-    "tiktok.com": TikTok
+    "tiktok.com": TikTok,
+    "twitter.com": Twitter,
+    "x.com": Twitter
 }
