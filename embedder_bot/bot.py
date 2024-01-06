@@ -27,18 +27,18 @@ class EmbedderBot(discord.Bot):
     
     async def fetch_media_link(self, message: discord.Message):
         
-        can_embed = False 
+        # can_embed = False 
 
-        for role in message.author.roles:
-            if role.permissions.embed_links:
-                can_embed = True
+        # for role in message.author.roles:
+        #     if role.permissions.embed_links:
+        #         can_embed = True
             
-            if role.permissions.attach_files:
-                can_attatch = True
+        #     if role.permissions.attach_files:
+        #         can_attatch = True
         
-        if not can_embed or not can_attatch:
+        # if not can_embed or not can_attatch:
 
-            return
+        #     return
         
         # check if link has an extractor
         extractor_class: Type[extractors.Extractor] = None 
