@@ -98,7 +98,7 @@ class Twitter(YTDLExtractor):
     
 URL_DOWNLOADER_MAP = {
     "ifunny.co": IFunny,
-    "tiktok.com": TikTok,
-    "twitter.com": Twitter,
-    "x.com": Twitter
+    "tiktok.com": TikTok
+    # "twitter.com": Twitter,
+    # "x.com": Twitter
 }
