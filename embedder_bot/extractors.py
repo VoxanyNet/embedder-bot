@@ -88,7 +88,7 @@ class Twitter(YTDLExtractor):
             info = self._extract_info()
 
         except yt_dlp.utils.DownloadError:
-            # tweet doesnt have media
+            # tweet doesnt have video
             return None
 
         with open("test.json", "w") as file:
@@ -98,7 +98,7 @@ class Twitter(YTDLExtractor):
     
 URL_DOWNLOADER_MAP = {
     "ifunny.co": IFunny,
-    "tiktok.com": TikTok
-    # "twitter.com": Twitter,
-    # "x.com": Twitter
+    "tiktok.com": TikTok,
+    "twitter.com": Twitter,
+    "x.com": Twitter
 }
