@@ -1,5 +1,5 @@
 from typing import Dict, Type
-import asyncio
+import uuid
 
 import discord
 
@@ -67,11 +67,16 @@ class EmbedderBot(discord.Bot):
             return
 
         await message.channel.trigger_typing()
+
+        file_extension = media_url.split(".")[-1]
+
+        slug = f"{str(uuid.uuid4())[0:5]}.{file_extension}"
         
         shortened_media_url = await self.loop.run_in_executor(
             None,
             self.shlink.shorten_url,
-            media_url
+            media_url,
+            slug
         )
 
         reply_message = await message.reply(shortened_media_url)

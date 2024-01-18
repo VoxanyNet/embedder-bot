@@ -1,3 +1,5 @@
+from typing import Optional
+
 import requests
 
 class Shlink:
@@ -5,14 +7,16 @@ class Shlink:
         self.url = url
         self.api_key = api_key
     
-    def shorten_url(self, url: str) -> str:
+    def shorten_url(self, url: str, slug: Optional[str] = None) -> str:
 
         request_body = {
             "longUrl": url,
             "crawlable": False,
             "forwardQuery": True,
-            "findIfExists": True
+            "findIfExists": False   
         }
+
+        if slug: request_body["customSlug"] = slug
 
         response = requests.post(
             f"{self.url}/rest/v3/short-urls",
