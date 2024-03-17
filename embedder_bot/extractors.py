@@ -39,36 +39,11 @@ class YTDLExtractor(Extractor):
             "quiet": True
         }
     
-    def _extract_info(self):
-        
-        with yt_dlp.YoutubeDL(self.yt_dlp_options) as yt:
-            info = yt.extract_info(self.url, download=False)
-
-            return info
-
-
-class IFunny(HTMLExtractor):
-
-    def extract_media_url(self) -> Optional[str]:
-        
-        html = self.session.get(self.url).text
-
-        media_url_begin_index = html.find("https://img.ifunny.co")
-
-        # this will give the index relative to the beginning of the media url
-        media_url_end_index = html[media_url_begin_index: ].find('"')
-
-        media_url = html[media_url_begin_index : media_url_begin_index + media_url_end_index]
-
-        return media_url
-
-class TikTok(YTDLExtractor):
-
     def extract_media_url(self) -> Optional[str]: 
 
         media_id = uuid.uuid4()
 
-        os.system(f"yt-dlp -o '{self.download_folder}/{media_id}.%(ext)s' https://www.tiktok.com/@fatfatpankocat/video/7319656930388020526")
+        os.system(f"yt-dlp -o '{self.download_folder}/{media_id}.%(ext)s' {self.url}")
 
         media_file_path = None
 
@@ -89,23 +64,29 @@ class TikTok(YTDLExtractor):
         
         media_url = f"https://dl.vxny.io/1176336161816461372/{media_file_path}"
 
-class Twitter(YTDLExtractor):
-    
+        return media_url
+
+
+class IFunny(HTMLExtractor):
+
     def extract_media_url(self) -> Optional[str]:
-
-        # TODO: add support to embed images
         
-        try:
-            info = self._extract_info()
+        html = self.session.get(self.url).text
 
-        except yt_dlp.utils.DownloadError:
-             # tweet doesnt have video
-            return None
+        media_url_begin_index = html.find("https://img.ifunny.co")
 
-        with open("test.json", "w") as file:
-            json.dump(info, file, indent=4)
+        # this will give the index relative to the beginning of the media url
+        media_url_end_index = html[media_url_begin_index: ].find('"')
 
-        return info["url"]
+        media_url = html[media_url_begin_index : media_url_begin_index + media_url_end_index]
+
+        return media_url
+
+class TikTok(YTDLExtractor):
+    pass
+
+class Twitter(YTDLExtractor):
+    pass
     
 URL_DOWNLOADER_MAP = {
     "ifunny.co": IFunny,

@@ -5,6 +5,11 @@ services:
       - BOT_DISCORD_TOKEN=${BOT_DISCORD_TOKEN}
       - SHLINK_DOMAIN=${SHLINK_DOMAIN}
       - SHLINK_API_KEY=${SHLINK_API_KEY}
+      - EMBEDDER_DOWNLOAD_FOLDER=/var/lib/embedder/downloads
+    volumes:
+      - type: bind
+        source: ${EMBEDDER_DOWNLOAD_FOLDER}
+        target: /var/lib/embedder/downloads
 
   shlink:
     image: shlinkio/shlink:stable
