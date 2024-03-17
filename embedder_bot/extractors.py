@@ -87,10 +87,14 @@ class TikTok(YTDLExtractor):
 
 class Twitter(YTDLExtractor):
     pass
+
+class YoutubeShorts(YTDLExtractor):
+    pass
     
 URL_DOWNLOADER_MAP = {
     "ifunny.co": IFunny,
     "tiktok.com": TikTok,
     "twitter.com": Twitter,
+    "youtube.com/shorts": YoutubeShorts,
     "x.com": Twitter
 }
