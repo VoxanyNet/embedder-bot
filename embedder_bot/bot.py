@@ -8,7 +8,9 @@ from embedder_bot import shlink
 from embedder_bot import commands
 
 class EmbedderBot(discord.Bot):
-    def __init__(self, shlink_url: str, shlink_api_key: str, description=None, *args, **options):
+    def __init__(self, shlink_url: str, shlink_api_key: str, download_folder: str, description=None, *args, **options):
+
+        self.download_folder = download_folder
 
         intents = discord.Intents.default()
         intents.message_content = True
@@ -55,7 +57,7 @@ class EmbedderBot(discord.Bot):
             return 
 
         # this wont work if the message contains more than just a url
-        extractor = extractor_class(url=message.content)
+        extractor = extractor_class(url=message.content, download_folder=self.download_folder)
 
         media_url = await self.loop.run_in_executor(
             None,
