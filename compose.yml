@@ -22,6 +22,7 @@ services:
       - DB_PASSWORD=${SHLINK_DATABASE_PASSWORD}
       - DB_HOST=shlink-database
       - IS_HTTPS_ENABLED=true
+      - GEOLITE_LICENSE_KEY=${SHLINK_GEOLITE_LICENSE_KEY}
     depends_on:
       - shlink-database
     restart: always
