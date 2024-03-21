@@ -43,9 +43,14 @@ class YTDLExtractor(Extractor):
 
         media_id = uuid.uuid4()
         
-        query_params_index = self.url.index("?")
+        try:
+            query_params_index = self.url.index("?")
 
-        url_no_query_params=self.url[0:query_params_index]
+            url_no_query_params=self.url[0:query_params_index]
+
+        except ValueError:
+            url_no_query_params = self.url
+
 
         os.system(f"yt-dlp -o '{self.download_folder}/{media_id}.%(ext)s' {url_no_query_params}")
 
