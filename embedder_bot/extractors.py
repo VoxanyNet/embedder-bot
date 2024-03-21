@@ -92,7 +92,21 @@ class IFunny(HTMLExtractor):
         return media_url
 
 class TikTok(YTDLExtractor):
-    pass
+    def extract_media_url(self) -> str | None:
+        
+        info = self._extract_info()
+
+        format = utils.find_one(
+            {
+                "format_note": "Direct video (API)"
+            },
+            info["formats"]
+        )
+
+        if format is None:
+            return None
+
+        return format["url"]
 
 class Twitter(YTDLExtractor):
     pass
