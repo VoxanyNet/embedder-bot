@@ -10,4 +10,4 @@ COPY ./embedder_bot ./embedder_bot
 
 RUN pip install -r ./embedder_bot/requirements.txt
 
-CMD ["python", "-m", "embedder_bot"]
+CMD ["python","-u", "-m", "embedder_bot"]
