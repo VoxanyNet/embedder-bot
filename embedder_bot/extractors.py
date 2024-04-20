@@ -39,6 +39,13 @@ class YTDLExtractor(Extractor):
             "quiet": True
         }
     
+    def _extract_info(self):
+        
+        with yt_dlp.YoutubeDL(self.yt_dlp_options) as yt:
+            info = yt.extract_info(self.url, download=False)
+
+            return info
+    
     def extract_media_url(self) -> Optional[str]: 
 
         media_id = uuid.uuid4()
@@ -92,7 +99,21 @@ class IFunny(HTMLExtractor):
         return media_url
 
 class TikTok(YTDLExtractor):
-    pass
+    def extract_media_url(self) -> str | None:
+
+        info = self._extract_info()
+
+        format = utils.find_one(
+            {
+                "format_note": "Direct video (API)"
+            },
+            info["formats"]
+        )
+
+        if format is None:
+            return None
+
+        return format["url"]
 
 class Twitter(YTDLExtractor):
     pass
