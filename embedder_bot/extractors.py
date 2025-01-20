@@ -109,7 +109,7 @@ class YoutubeShorts(YTDLExtractor):
     
 URL_DOWNLOADER_MAP = {
     "ifunny.co": IFunny,
-    #"tiktok.com": TikTok,
+    "tiktok.com": TikTok,
     "twitter.com": Twitter,
     "youtube.com/shorts": YoutubeShorts,
     "x.com": Twitter

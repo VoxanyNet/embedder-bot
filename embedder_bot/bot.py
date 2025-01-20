@@ -26,11 +26,6 @@ class EmbedderBot(discord.Bot):
         self.add_application_command(commands.ping)
 
         self.shlink = shlink.Shlink(url=shlink_url, api_key=shlink_api_key)
-    
-    async def on_ready(self):
-        await self.change_presence(
-            activity=discord.CustomActivity(name="TikTok embeds have been disabled")
-        )
 
     async def fetch_media_link(self, message: discord.Message):
         
